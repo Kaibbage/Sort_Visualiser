@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widgets with Responsive Sidebars</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="controls">
+        <label for="widgetCount">Number of Widgets:</label>
+        <input type="number" id="widgetCount" min="1" max="6" value="1" placeholder="Widgets" />
+
+        <label for="lineCount">Lines per Widget (n):</label>
+        <input type="number" id="lineCount" min="1" value="100" placeholder="Lines" />
+
+        <button id="submit-Btn">Submit</button>
+    </div>
+
+    <div class="widget-container" id="widgetContainer"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
