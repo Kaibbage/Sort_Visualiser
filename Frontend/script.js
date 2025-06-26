@@ -1,16 +1,20 @@
+let numLines;
+let numWidgets;
+
 function generateWidgets() {
-    const widgetCount = parseInt(document.getElementById('widgetCount').value);
-    const lineCount = parseInt(document.getElementById('lineCount').value);
+    numWidgets = parseInt(document.getElementById('widgetCount').value);
+    numLines = parseInt(document.getElementById('lineCount').value);
+
     const container = document.getElementById('widgetContainer');
     container.innerHTML = '';
 
-    if (isNaN(widgetCount) || widgetCount < 1 || widgetCount > 6) return;
+    if (isNaN(numWidgets) || numWidgets < 1 || numWidgets > 6) return;
 
     const screenWidth = window.innerWidth * 0.9;
     const screenHeight = (window.innerHeight - 150) * 0.9;
 
-    let columns = widgetCount <= 2 ? widgetCount : Math.ceil(widgetCount / 2);
-    let rows = widgetCount > 2 ? 2 : 1;
+    let columns = numWidgets <= 2 ? numWidgets : Math.ceil(numWidgets / 2);
+    let rows = numWidgets > 2 ? 2 : 1;
 
     const gap = 20;
     const totalGapWidth = gap * (columns + 1);
@@ -23,28 +27,34 @@ function generateWidgets() {
     const sidebarWidth = Math.max(minSidebarWidth, Math.floor(widgetWrapperWidth * 0.15));
     const widgetWidth = widgetWrapperWidth - sidebarWidth;
 
-    let vals = generateVals(widgetWrapperHeight, lineCount);
+    let vals = generateVals(widgetWrapperHeight, numLines);
 
-    for (let i = 0; i < widgetCount; i++) {
+    for (let i = 0; i < numWidgets; i++) {
         const wrapper = document.createElement('div');
         wrapper.className = 'widget-wrapper';
+        wrapper.id = `wrapper-${i}`;
         wrapper.style.width = `${widgetWrapperWidth}px`;
         wrapper.style.height = `${widgetWrapperHeight}px`;
+        
 
         const widget = document.createElement('div');
         widget.className = 'widget';
+        widget.id = `widget-${i}`;
         widget.style.width = `${widgetWidth}px`;
         widget.style.height = `${widgetWrapperHeight}px`;
 
         const sidebar = document.createElement('div');
         sidebar.className = 'sidebar';
+        sidebar.id = `sidebar-${i}`;
         sidebar.style.width = `${sidebarWidth}px`;
 
         const label = document.createElement('div');
+        label.id = `label-${i}`;
         label.textContent = `Widget ${i + 1}`;
 
         const select = document.createElement('select');
         select.title = 'Options';
+        select.id = `select-${i}`;
         select.innerHTML = `
           <option value="default">Default</option>
           <option value="fewLines">Fewer lines</option>
@@ -55,6 +65,7 @@ function generateWidgets() {
         const currentSelection = document.createElement('div');
         currentSelection.className = 'current-selection';
         currentSelection.textContent = 'Selected: Default';
+        currentSelection.id = `current-select-${i}`;
 
         select.onchange = (e) => {
             const val = e.target.value;
@@ -72,27 +83,28 @@ function generateWidgets() {
 
 
 
-        drawLinesInWidget(widget, lineCount, vals);
+        drawLinesInWidget(widget, numLines, vals, i);
     }
 }
 
-function generateVals(widgetHeight, lineCount){
+function generateVals(widgetHeight, numLines){
     let vals = [];
 
-    for(let i = 0; i < lineCount; i++){
+    for(let i = 0; i < numLines; i++){
         vals.push(Math.floor(Math.random() * widgetHeight * 0.9) + 10)
     }
 
     return vals;
 }
 
-function drawLinesInWidget(widget, count, vals) {
+function drawLinesInWidget(widget, count, vals, widgetNum) {
     const spacing = widget.clientWidth / (count + 1);
     const widgetHeight = widget.clientHeight;
 
     for (let i = 1; i <= count; i++) {
         const line = document.createElement('div');
         line.className = 'vertical-line';
+        line.id = `${widgetNum}-line-${i-1}`;
 
         const randomHeight = vals[i];
         line.style.height = `${randomHeight}px`;
@@ -128,6 +140,12 @@ function initialize(){
 
     widgetInput.addEventListener('input', limitInputs);
     lineInput.addEventListener('input', limitInputs);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key == "Enter") {
+            generateWidgets();
+        }
+    });
 
     generateWidgets();
 }

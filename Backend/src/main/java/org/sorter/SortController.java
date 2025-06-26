@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://127.0.0.1:8081")  // Adjust the URL to your frontend's URL if necessary
-public class GraphExploreController {
+public class SortController {
 
-    //private GraphExploreWebSocketHandler webSocketHandler;
+    private SortWebSocketHandler webSocketHandler;
 
     // Constructor injection of WebSocket handler
     public SortController(SortWebSocketHandler webSocketHandler) {
-        //this.webSocketHandler = webSocketHandler;
+        this.webSocketHandler = webSocketHandler;
     }
 
     public static class InputRequest {
