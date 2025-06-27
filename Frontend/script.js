@@ -83,7 +83,7 @@ function generateWidgets() {
 
 
 
-        drawLinesInWidget(widget, numLines, vals, i);
+        drawLinesInWidget(numLines, vals, i);
     }
 }
 
@@ -97,7 +97,8 @@ function generateVals(widgetHeight, numLines){
     return vals;
 }
 
-function drawLinesInWidget(widget, count, vals, widgetNum) {
+function drawLinesInWidget(count, vals, widgetNum) {
+    let widget = document.getElementById(`widget-${widgetNum}`)
     const spacing = widget.clientWidth / (count + 1);
     const widgetHeight = widget.clientHeight;
 
