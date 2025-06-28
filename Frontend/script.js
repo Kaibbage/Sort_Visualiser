@@ -1,5 +1,33 @@
+const apiBaseUrl = "http://localhost:8080";
+const wsUrl = "ws://localhost:8080/ws/sorter";
+let socket;
+
 let numLines;
 let numWidgets;
+
+function openWebSocket() {
+    socket = new WebSocket(wsUrl);
+
+    socket.onopen = function(event) {
+        console.log("WebSocket is connected meow meow");
+    };
+
+    socket.onmessage = processSocketMsg;
+
+    socket.onerror = function(error) {
+        console.log('WebSocket Error:', error);
+    };
+
+    socket.onclose = function(event) {
+        console.log('WebSocket connection closed');
+    };
+}
+
+function processSocketMsg(event){
+    let str = event.data;
+    let fivePart = str.split("::");
+ 
+}
 
 function generateWidgets() {
     numWidgets = parseInt(document.getElementById('widgetCount').value);
@@ -149,6 +177,8 @@ function initialize(){
     });
 
     generateWidgets();
+
+    openWebSocket();
 }
 
 
