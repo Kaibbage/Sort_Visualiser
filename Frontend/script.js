@@ -9,7 +9,7 @@ function openWebSocket() {
     socket = new WebSocket(wsUrl);
 
     socket.onopen = function(event) {
-        console.log("WebSocket is connected meow meow");
+        console.log("WebSocket is connected turtle turtle");
     };
 
     socket.onmessage = processSocketMsg;
@@ -84,11 +84,16 @@ function generateWidgets() {
         select.title = 'Options';
         select.id = `select-${i}`;
         select.innerHTML = `
-          <option value="default">Default</option>
-          <option value="fewLines">Fewer lines</option>
-          <option value="manyLines">More lines</option>
-          <option value="regen">Regenerate</option>
+          <option value="bubble">Bubble Sort</option>
+          <option value="selection">Selection Sort</option>
+          <option value="insertion">Insertion Sort</option>
+          <option value="merge">Merge Sort</option>
+          <option value="quick">Quick Sort</option>
+          <option value="heap">Heap Sort</option>
+          <option value="counting">Counting Sort</option>
         `;
+
+        //maybe don't do counting sort lol, we see, it will just look like a write over, maybe we do tho, we see
 
         const currentSelection = document.createElement('div');
         currentSelection.className = 'current-selection';
@@ -96,7 +101,6 @@ function generateWidgets() {
         currentSelection.id = `current-select-${i}`;
 
         select.onchange = (e) => {
-            const val = e.target.value;
             const selectedText = e.target.options[e.target.selectedIndex].text;
             currentSelection.textContent = 'Selected: ' + selectedText;
         };
@@ -114,6 +118,7 @@ function generateWidgets() {
         drawLinesInWidget(numLines, vals, i);
     }
 }
+
 
 function generateVals(widgetHeight, numLines){
     let vals = [];
@@ -160,11 +165,11 @@ function limitInputs() {
     lineInput.value = lineVal;
 }
 
-async function sendGraphDataToBackend(dataAsString) {
+async function sendGraphDataToBackend(selectedOption, dataAsString) {
     const data = { input: dataAsString };
 
     try {
-        const response = await fetch(`${apiBaseUrl}/generate-random-boggle-grid`, {
+        const response = await fetch(`${apiBaseUrl}/solve-${selectedOption}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -186,6 +191,12 @@ function startSolvingAll(){
         let vals = getValsFromGraph(i);
         let dataString = getDataString(i, vals);
         
+        let select = document.getElementById(`select-${i}`);
+        let selectedOption = select.value;
+
+        sendGraphDataToBackend(selectedOption, dataString);
+
+        console.log("done" + i);
     }
 }
 
@@ -209,10 +220,13 @@ function getValsFromGraph(widgetNum){
 
 function initialize(){
     let submitButton = document.getElementById("submit-Btn");
+    let sortButton = document.getElementById("sort-Btn");
     let widgetInput = document.getElementById('widgetCount');
     let lineInput = document.getElementById('lineCount');
 
     submitButton.addEventListener("click", generateWidgets);
+
+    sortButton.addEventListener("click", startSolvingAll);
 
     widgetInput.addEventListener('input', limitInputs);
     lineInput.addEventListener('input', limitInputs);

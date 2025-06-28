@@ -26,6 +26,13 @@ public class SortController {
         }
     }
 
+    @PostMapping("/solve-bubble")
+    public String startSolvingBubbleSort(@RequestBody InputRequest request){
+        String input = request.getInput();;
+
+        return "";
+    }
+
 
 
 //    @PostMapping("/start-solving-dijkstra")

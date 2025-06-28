@@ -34,14 +34,28 @@ button {
     font-size: 16px;
     border: none;
     border-radius: 6px;
-    background-color: #4a90e2;
     color: white;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-button:hover {
+#submit-Btn {
+    background-color: #4a90e2;
+}
+
+#submit-Btn:hover {
     background-color: #357ab8;
+}
+
+#sort-Btn {
+    background-color: lightgreen;
+    margin-left: 30px;
+    width: 100px;
+    height: 50px;
+}
+
+#sort-Btn:hover {
+    background-color: #7CCD7C;
 }
 
 .widget-container {
