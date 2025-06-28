@@ -160,6 +160,53 @@ function limitInputs() {
     lineInput.value = lineVal;
 }
 
+async function sendGraphDataToBackend(dataAsString) {
+    const data = { input: dataAsString };
+
+    try {
+        const response = await fetch(`${apiBaseUrl}/generate-random-boggle-grid`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data), //sendinginfo
+        });
+
+        const result = await response.text(); // Extract result
+        return result; 
+
+    } catch (error) {
+        console.error("Error:", error);
+        throw error; //throw error if needed
+    }
+}
+
+function startSolvingAll(){
+    for(let i = 0; i < numWidgets; i++){
+        let vals = getValsFromGraph(i);
+        let dataString = getDataString(i, vals);
+        
+    }
+}
+
+function getDataString(widgetNum, vals) {
+    let dataString = widgetNum + "::" + vals.join(" ");
+    return dataString;
+}
+
+function getValsFromGraph(widgetNum){
+    let vals = [];
+    let widget = document.getElementById(`widget-${widgetNum}`);
+
+    for(let i = 0; i < numLines; i++){
+        let line = document.getElementById(`${widgetNum}-line-${i}`);
+        vals.push(parseInt(line.style.height));
+    }
+
+    return vals;
+
+}
+
 function initialize(){
     let submitButton = document.getElementById("submit-Btn");
     let widgetInput = document.getElementById('widgetCount');
