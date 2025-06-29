@@ -25,8 +25,24 @@ function openWebSocket() {
 
 function processSocketMsg(event){
     let str = event.data;
-    let fivePart = str.split("::");
+    let twoPart = str.split("::");
+
+    let widgetNum = parseInt(twoPart[0]);
+    let vals = getValsFromString(twoPart[1]);
+
+    
+
+    drawLinesInWidget(numLines, vals, widgetNum);
  
+}
+
+function getValsFromString(valsString){
+    let valsStringArray = valsString.split(" ");
+    let vals = [];
+    for(let valString of valsStringArray){
+        vals.push(parseInt(valString));
+    }
+    return vals;
 }
 
 function generateWidgets() {
@@ -124,30 +140,38 @@ function generateVals(widgetHeight, numLines){
     let vals = [];
 
     for(let i = 0; i < numLines; i++){
-        vals.push(Math.floor(Math.random() * widgetHeight * 0.9) + 10)
+        vals.push(Math.floor(Math.random() * widgetHeight * 0.9) + 10);
     }
 
     return vals;
 }
 
 function drawLinesInWidget(count, vals, widgetNum) {
-    let widget = document.getElementById(`widget-${widgetNum}`)
+    let widget = document.getElementById(`widget-${widgetNum}`);
     const spacing = widget.clientWidth / (count + 1);
     const widgetHeight = widget.clientHeight;
 
-    for (let i = 1; i <= count; i++) {
+    widget.innerHTML = "";
+
+    const minVal = Math.min(...vals);
+    const maxVal = Math.max(...vals);
+
+    for (let i = 0; i < count; i++) {
         const line = document.createElement('div');
         line.className = 'vertical-line';
-        line.id = `${widgetNum}-line-${i-1}`;
+        line.id = `${widgetNum}-line-${i}`;
 
-        const randomHeight = vals[i];
-        line.style.height = `${randomHeight}px`;
-        line.style.left = `${i * spacing}px`;
-        line.style.backgroundColor = "#4a90e2"
+        const height = vals[i];
+        line.style.height = `${height}px`;
+        line.style.left = `${(i + 1) * spacing}px`;
+
+        const hue = 360 * (height - minVal) / (maxVal - minVal || 1);
+        line.style.backgroundColor = `hsl(${hue}, 70%, 40%)`;
 
         widget.appendChild(line);
     }
 }
+
 
 function limitInputs() {
     const widgetInput = document.getElementById('widgetCount');
@@ -167,6 +191,8 @@ function limitInputs() {
 
 async function sendGraphDataToBackend(selectedOption, dataAsString) {
     const data = { input: dataAsString };
+
+    console.log(dataAsString);
 
     try {
         const response = await fetch(`${apiBaseUrl}/solve-${selectedOption}`, {
@@ -195,8 +221,7 @@ function startSolvingAll(){
         let selectedOption = select.value;
 
         sendGraphDataToBackend(selectedOption, dataString);
-
-        console.log("done" + i);
+    
     }
 }
 
