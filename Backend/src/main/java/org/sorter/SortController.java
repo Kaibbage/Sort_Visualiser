@@ -94,6 +94,27 @@ public class SortController {
             }
         }).start();
 
+        return "";
+    }
+
+
+    @PostMapping("/solve-merge")
+    public String startSolvingMergeSort(@RequestBody InputRequest request){
+        String input = request.getInput();
+
+        String[] twoPart = input.split("::");
+
+        int widgetNum = Integer.parseInt(twoPart[0]);
+        String valsAsString = twoPart[1];
+        List<Integer> vals = getListFromString(valsAsString);
+
+        new Thread(() -> {
+            try {
+                sortAlgorithms.mergeSort(widgetNum, vals);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
 
         return "";
     }

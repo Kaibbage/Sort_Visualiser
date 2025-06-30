@@ -45,6 +45,28 @@ function getValsFromString(valsString){
     return vals;
 }
 
+function submitNewParameters(){
+    let newNumWidgets = parseInt(document.getElementById('widgetCount').value);
+
+    if(numWidgets && numWidgets === newNumWidgets){
+        regenerateSameWidgetsWithNewLines();
+    }
+    else{
+        generateWidgets();
+    }
+}
+
+function regenerateSameWidgetsWithNewLines(){
+    numLines = parseInt(document.getElementById('lineCount').value);
+    
+    let widgetHeight = document.getElementById(`widget-${0}`).clientHeight;
+    let vals = generateVals(widgetHeight, numLines);
+
+    for(let i = 0; i < numWidgets; i++){
+        drawLinesInWidget(numLines, vals, i);
+    }
+}
+
 function generateWidgets() {
     numWidgets = parseInt(document.getElementById('widgetCount').value);
     numLines = parseInt(document.getElementById('lineCount').value);
@@ -115,7 +137,7 @@ function generateWidgets() {
 
         const currentSelection = document.createElement('div');
         currentSelection.className = 'current-selection';
-        currentSelection.textContent = 'Selected: Default';
+        currentSelection.textContent = 'Selected: Bubble Sort';
         currentSelection.id = `current-select-${i}`;
 
         select.onchange = (e) => {
@@ -261,7 +283,7 @@ function initialize(){
     let widgetInput = document.getElementById('widgetCount');
     let lineInput = document.getElementById('lineCount');
 
-    submitButton.addEventListener("click", generateWidgets);
+    submitButton.addEventListener("click", submitNewParameters);
 
     sortButton.addEventListener("click", startSolvingAll);
 

@@ -1,5 +1,6 @@
 package org.sorter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.sorter.Constants.TIME;
@@ -72,6 +73,54 @@ public class SortAlgorithms {
         }
 
         return minIndex;
+    }
+
+    public void mergeSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+        mergeSortRecursive(widgetNum, vals, 0, n-1);
+    }
+
+    public void mergeSortRecursive(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
+        if(l == r){
+            return;
+        }
+
+        int m = (l+r)/2;
+
+        mergeSortRecursive(widgetNum, vals, l, m); //left side
+        mergeSortRecursive(widgetNum, vals, m+1, r); //right side
+
+        merge(widgetNum, vals, l, m, m+1, r);
+    }
+
+    //note that the r here represents something different than the r in the parent function
+    public void merge(int widgetNum, List<Integer> vals, int l, int lEnd, int r, int rEnd) throws InterruptedException {
+        List<Integer> temp = new ArrayList<>();
+        int savedL = l;
+
+        while(l <= lEnd || r <= rEnd){
+            if(l > lEnd){
+                temp.add(vals.get(r));
+                r++;
+            }
+            else if(r > rEnd){
+                temp.add(vals.get(l));
+                l++;
+            }
+            else if(vals.get(l) < vals.get(r)){
+                temp.add(vals.get(l));
+                l++;
+            }
+            else{ //vals.get(r) <= vals.get(r)
+                temp.add(vals.get(r));
+                r++;
+            }
+        }
+
+        for(int i = 0; i < temp.size(); i++){
+            vals.set(savedL+i, temp.get(i));
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
     }
 
 
