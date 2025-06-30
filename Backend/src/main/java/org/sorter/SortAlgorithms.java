@@ -17,6 +17,7 @@ public class SortAlgorithms {
 
         for(int end = n-1; end >= 0; end--){
             for(int i = 0; i <= end-1; i++){
+                buildAndSendString(widgetNum, vals, n);
                 if(vals.get(i) > vals.get(i+1)){
                     swap(vals, i, i+1);
                     buildAndSendString(widgetNum, vals, n);
@@ -50,8 +51,33 @@ public class SortAlgorithms {
         }
     }
 
+    public void selectionSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+
+        for(int i = 0; i < n; i++){
+            int minIndex = getMinIndex(vals, i, n, widgetNum);
+            swap(vals, minIndex, i);
+            buildAndSendString(widgetNum, vals, n);
+        }
+    }
+
+    public int getMinIndex(List<Integer> vals, int start, int n, int widgetNum) throws InterruptedException {
+        int minIndex = start;
+
+        for(int i = start+1; i < n; i++){
+            if(vals.get(i) < vals.get(minIndex)){
+                minIndex = i;
+            }
+            buildAndSendString(widgetNum, vals, n);
+        }
+
+        return minIndex;
+    }
+
 
     //time slept should maybe be based on n
+    //want to call this once for each operation (either compare or swap)
+    //if the operation is smth i can't measure(removing from a heap) maybe add a logn delay option for a longer delay than per 1 operation
     public void buildAndSendString(int widgetNum, List<Integer> vals, int n) throws InterruptedException {
         Thread.sleep(TIME/n);
         String s = createSendBackString(widgetNum, vals);
