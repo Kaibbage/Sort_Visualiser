@@ -31,6 +31,12 @@ public class SortAlgorithms {
         vals.set(index2, temp);
     }
 
+    public void insertionSort(int widgetNum, List<Integer> vals){
+        int n = vals.size();
+
+
+    }
+
     //time slept should maybe be based on n
     public void buildAndSendString(int widgetNum, List<Integer> vals, int n) throws InterruptedException {
         Thread.sleep(TIME/n);

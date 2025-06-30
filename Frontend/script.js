@@ -148,7 +148,7 @@ function generateVals(widgetHeight, numLines){
 
 function drawLinesInWidget(count, vals, widgetNum) {
     let widget = document.getElementById(`widget-${widgetNum}`);
-    const spacing = widget.clientWidth / (count + 1);
+    const widgetWidth = widget.clientWidth;
     const widgetHeight = widget.clientHeight;
 
     widget.innerHTML = "";
@@ -156,21 +156,31 @@ function drawLinesInWidget(count, vals, widgetNum) {
     const minVal = Math.min(...vals);
     const maxVal = Math.max(...vals);
 
+    const gap = 0; // pixels between lines
+    const totalGap = gap * (count - 1);
+    const lineWidth = (widgetWidth - totalGap) / count;
+
+    let left = 0;
     for (let i = 0; i < count; i++) {
         const line = document.createElement('div');
         line.className = 'vertical-line';
         line.id = `${widgetNum}-line-${i}`;
 
         const height = vals[i];
+        line.style.position = 'absolute';
+        line.style.bottom = '0';
         line.style.height = `${height}px`;
-        line.style.left = `${(i + 1) * spacing}px`;
+        line.style.width = `${lineWidth}px`;
+        line.style.left = `${left}px`;
 
         const hue = 360 * (height - minVal) / (maxVal - minVal || 1);
         line.style.backgroundColor = `hsl(${hue}, 70%, 40%)`;
 
         widget.appendChild(line);
+        left += lineWidth + gap;
     }
 }
+
 
 
 function limitInputs() {

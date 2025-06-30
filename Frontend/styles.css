@@ -86,7 +86,7 @@ button {
 .vertical-line {
     position: absolute;
     bottom: 0;
-    width: 5px;
+    /*width: 5px;*/
 }
 
 .sidebar {
