@@ -31,11 +31,25 @@ public class SortAlgorithms {
         vals.set(index2, temp);
     }
 
-    public void insertionSort(int widgetNum, List<Integer> vals){
+    public void insertionSort(int widgetNum, List<Integer> vals) throws InterruptedException {
         int n = vals.size();
 
+        for(int i = 0; i < n; i++){
+            int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
 
+            for(int j = i-1; j >= 0; j--){
+                if(val < vals.get(j)){
+                    swap(vals, j, j+1);
+                    buildAndSendString(widgetNum, vals, n);
+                }
+                else{
+                    break;
+                }
+            }
+
+        }
     }
+
 
     //time slept should maybe be based on n
     public void buildAndSendString(int widgetNum, List<Integer> vals, int n) throws InterruptedException {

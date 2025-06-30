@@ -54,6 +54,28 @@ public class SortController {
         return "";
     }
 
+    @PostMapping("/solve-insertion")
+    public String startSolvingInsertionSort(@RequestBody InputRequest request){
+        String input = request.getInput();
+
+        String[] twoPart = input.split("::");
+
+        int widgetNum = Integer.parseInt(twoPart[0]);
+        String valsAsString = twoPart[1];
+        List<Integer> vals = getListFromString(valsAsString);
+
+        new Thread(() -> {
+            try {
+                sortAlgorithms.insertionSort(widgetNum, vals);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+
+        return "";
+    }
+
 
 
 //    @PostMapping("/start-solving-dijkstra")

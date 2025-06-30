@@ -156,7 +156,7 @@ function drawLinesInWidget(count, vals, widgetNum) {
     const minVal = Math.min(...vals);
     const maxVal = Math.max(...vals);
 
-    const gap = 0; // pixels between lines
+    const gap = 0; //pixels between lines
     const totalGap = gap * (count - 1);
     const lineWidth = (widgetWidth - totalGap) / count;
 
