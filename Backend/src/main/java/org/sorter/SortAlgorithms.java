@@ -177,10 +177,108 @@ public class SortAlgorithms {
             buildAndSendString(widgetNum, vals, vals.size());
         }
 
-        quickSortRecursive(widgetNum, vals, l, l + left.size() - 1);
-        quickSortRecursive(widgetNum, vals, l + left.size() + middle , r);
+        int leftEnd = l + left.size() - 1;
+        int rightStart = leftEnd + 1 + middle;
+
+        quickSortRecursive(widgetNum, vals, l, leftEnd);
+        quickSortRecursive(widgetNum, vals, rightStart , r);
 
     }
+
+    public void doublePivotQuickSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+        doublePivotQuickSortRecursive(widgetNum, vals, 0, n-1);
+    }
+
+    public void doublePivotQuickSortRecursive(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
+        if(l >= r) {
+            return;
+        }
+
+        int pivot1 = vals.get(l);
+        int pivot2 = vals.get(r);
+
+        if(pivot1 > pivot2){
+            int temp = pivot1;
+            pivot1 = pivot2;
+            pivot2 = temp;
+        }
+
+        List<Integer> left = new ArrayList<>();
+        List<Integer> equalToPivot1 = new ArrayList<>();
+        List<Integer> between = new ArrayList<>();
+        List<Integer> equalToPivot2 = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+
+        for(int i = l; i <= r; i++){
+            int val = vals.get(i);
+
+            if(val < pivot1){
+                left.add(val);
+                delay(vals.size());
+            }
+            else if (val == pivot1){
+                equalToPivot1.add(val);
+                delay(vals.size());
+            }
+            else if (val > pivot1 && val < pivot2){
+                between.add(val);
+                delay(vals.size());
+            }
+            else if (val == pivot2){
+                equalToPivot2.add(val);
+                delay(vals.size());
+            }
+            else{
+                right.add(val);
+                delay(vals.size());
+            }
+
+        }
+
+        int index = l;
+
+        for(int v: left){
+            vals.set(index, v);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        for(int v: equalToPivot1){
+            vals.set(index, v);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        for(int v: between){
+            vals.set(index, v);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        for(int v: equalToPivot2){
+            vals.set(index, v);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        for(int v: right){
+            vals.set(index, v);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        int leftEnd = l + left.size() - 1;
+        int betweenStart = leftEnd + 1 + equalToPivot1.size();
+        int betweenEnd = betweenStart + between.size() - 1;
+        int rightStart = betweenEnd + 1 + equalToPivot2.size() ;
+
+        doublePivotQuickSortRecursive(widgetNum, vals, l, leftEnd);
+        doublePivotQuickSortRecursive(widgetNum, vals, betweenStart, betweenEnd);
+        doublePivotQuickSortRecursive(widgetNum, vals, rightStart, r);
+
+    }
+
 
 
     public void delay(int n) throws InterruptedException {
