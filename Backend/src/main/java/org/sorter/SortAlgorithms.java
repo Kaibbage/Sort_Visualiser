@@ -2,6 +2,7 @@ package org.sorter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import static org.sorter.Constants.TIME;
 import static org.sorter.ParseUtils.createSendBackString;
@@ -271,12 +272,56 @@ public class SortAlgorithms {
         int leftEnd = l + left.size() - 1;
         int betweenStart = leftEnd + 1 + equalToPivot1.size();
         int betweenEnd = betweenStart + between.size() - 1;
-        int rightStart = betweenEnd + 1 + equalToPivot2.size() ;
+        int rightStart = betweenEnd + 1 + equalToPivot2.size();
 
         doublePivotQuickSortRecursive(widgetNum, vals, l, leftEnd);
         doublePivotQuickSortRecursive(widgetNum, vals, betweenStart, betweenEnd);
         doublePivotQuickSortRecursive(widgetNum, vals, rightStart, r);
 
+    }
+
+    //building my own max heap for heapsort because i can't put delays on the operations using a priorityqueue T_T
+    public void heapSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+
+        for(int i = n/2 - 1; i >= 0; i--){
+            heapify(widgetNum, vals, n, i);
+        }
+
+
+        for(int i = n-1; i > 0; i--){
+            swap(vals, 0, i);
+            buildAndSendString(widgetNum, vals, n);
+
+            heapify(widgetNum, vals, i, 0);
+        }
+    }
+
+    void heapify(int widgetNum, List<Integer> vals, int n, int i) throws InterruptedException {
+        int largest = i;
+        int l = 2*i + 1;
+        int r = 2*i + 2;
+
+        if(l < n){
+            delay(n);
+            if(vals.get(l) > vals.get(largest)){
+                largest = l;
+            }
+        }
+
+        if(r < n){
+            delay(n);
+            if(vals.get(r) > vals.get(largest)){
+                largest = r;
+            }
+        }
+
+        if(largest != i){
+            swap(vals, i, largest);
+            buildAndSendString(widgetNum, vals, n);
+
+            heapify(widgetNum, vals, n, largest);
+        }
     }
 
 

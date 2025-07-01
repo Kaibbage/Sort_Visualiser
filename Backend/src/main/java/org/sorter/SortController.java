@@ -161,6 +161,27 @@ public class SortController {
         return "";
     }
 
+    @PostMapping("/solve-heap")
+    public String startSolvingHeapSort(@RequestBody InputRequest request){
+        String input = request.getInput();
+
+        String[] twoPart = input.split("::");
+
+        int widgetNum = Integer.parseInt(twoPart[0]);
+        String valsAsString = twoPart[1];
+        List<Integer> vals = getListFromString(valsAsString);
+
+        new Thread(() -> {
+            try {
+                sortAlgorithms.heapSort(widgetNum, vals);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+
+        return "";
+    }
+
 
 
 //    @PostMapping("/start-solving-dijkstra")
