@@ -18,7 +18,7 @@ public class SortAlgorithms {
 
         for(int end = n-1; end >= 0; end--){
             for(int i = 0; i <= end-1; i++){
-                buildAndSendString(widgetNum, vals, n);
+                delay(n);
                 if(vals.get(i) > vals.get(i+1)){
                     swap(vals, i, i+1);
                     buildAndSendString(widgetNum, vals, n);
@@ -69,7 +69,7 @@ public class SortAlgorithms {
             if(vals.get(i) < vals.get(minIndex)){
                 minIndex = i;
             }
-            buildAndSendString(widgetNum, vals, n);
+            delay(n);
         }
 
         return minIndex;
@@ -102,18 +102,22 @@ public class SortAlgorithms {
             if(l > lEnd){
                 temp.add(vals.get(r));
                 r++;
+                delay(vals.size());
             }
             else if(r > rEnd){
                 temp.add(vals.get(l));
                 l++;
+                delay(vals.size());
             }
             else if(vals.get(l) < vals.get(r)){
                 temp.add(vals.get(l));
                 l++;
+                delay(vals.size());
             }
             else{ //vals.get(r) <= vals.get(r)
                 temp.add(vals.get(r));
                 r++;
+                delay(vals.size());
             }
         }
 
@@ -123,12 +127,72 @@ public class SortAlgorithms {
         }
     }
 
+    public void quickSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+
+        quickSortRecursive(widgetNum, vals, 0, n-1);
+    }
+
+    public void quickSortRecursive(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
+        if(l >= r){
+            return;
+        }
+
+        List<Integer> left = new ArrayList<>();
+        int middle = 0;
+        List<Integer> right = new ArrayList<>();
+
+        int pivot = vals.get(l);
+
+        for(int i = l; i <= r; i++){
+            int val = vals.get(i);
+            if(val < pivot){
+                left.add(val);
+                delay(vals.size());
+            }
+            else if(val > pivot){
+                right.add(val);
+                delay(vals.size());
+            }
+            else{
+                middle++;
+                delay(vals.size());
+            }
+        }
+
+        int index = l;
+        for(int leftVal: left){
+            vals.set(index, leftVal);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+        for(int i = 0; i < middle; i++){
+            vals.set(index, pivot);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+        for(int rightVal: right){
+            vals.set(index, rightVal);
+            index++;
+            buildAndSendString(widgetNum, vals, vals.size());
+        }
+
+        quickSortRecursive(widgetNum, vals, l, l + left.size() - 1);
+        quickSortRecursive(widgetNum, vals, l + left.size() + middle , r);
+
+    }
+
+
+    public void delay(int n) throws InterruptedException {
+        Thread.sleep(TIME/n);
+    }
+
 
     //time slept should maybe be based on n
     //want to call this once for each operation (either compare or swap)
     //if the operation is smth i can't measure(removing from a heap) maybe add a logn delay option for a longer delay than per 1 operation
     public void buildAndSendString(int widgetNum, List<Integer> vals, int n) throws InterruptedException {
-        Thread.sleep(TIME/n);
+        delay(n);
         String s = createSendBackString(widgetNum, vals);
         sendUpdateToFrontend(s);
     }
