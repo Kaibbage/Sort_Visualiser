@@ -130,8 +130,8 @@ function generateWidgets() {
           <option value="double-pivot-quick">Double Pivot Quick Sort</option>
           <option value="heap">Heap Sort</option>
           <option value="counting">Counting Sort</option>
-          <option value="bozo">Bozo Sort</option>
           <option value="bogo">Bogo Sort</option>
+          <option value="bozo">Bozo Sort</option>
         `;
 
         //maybe don't do counting sort lol, we see, it will just look like a write over, maybe we do tho, we see

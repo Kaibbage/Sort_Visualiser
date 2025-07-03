@@ -1,6 +1,7 @@
 package org.sorter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -322,6 +323,43 @@ public class SortAlgorithms {
 
             heapify(widgetNum, vals, n, largest);
         }
+    }
+
+    public void bogoSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+
+        while(!isSorted(vals)){
+            Collections.shuffle(vals);
+            for(int i = 0; i < n-1; i++){
+                delay(n);
+            }
+            buildAndSendString(widgetNum, vals, n);
+        }
+    }
+
+    public void bozoSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+        int n = vals.size();
+
+        while(!isSorted(vals)){
+            int rand1 = (int) (Math.random() * n);
+            int rand2 = (int) (Math.random() * n);
+            swap(vals, rand1, rand2);
+            delay(n);
+            buildAndSendString(widgetNum, vals, n);
+        }
+    }
+
+    //maybe add n delays in here if we want it to be realistic time like the others,
+    //however that will also take forever as bogo and bozo sort are O(n!) as they check approximately every possibility
+    //which for n numbers the number of orderings is n!
+    public boolean isSorted(List<Integer> vals){
+        for(int i = 0; i < vals.size()-1; i++){
+            if(vals.get(i) > vals.get(i+1)){
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
