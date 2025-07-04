@@ -100,18 +100,9 @@ public class SortAlgorithms {
         List<Integer> temp = new ArrayList<>();
         int savedL = l;
 
-        while(l <= lEnd || r <= rEnd){
-            if(l > lEnd){
-                temp.add(vals.get(r));
-                r++;
-                delay(vals.size());
-            }
-            else if(r > rEnd){
-                temp.add(vals.get(l));
-                l++;
-                delay(vals.size());
-            }
-            else if(vals.get(l) < vals.get(r)){
+        //go until one runs out
+        while(l <= lEnd && r <= rEnd){
+            if(vals.get(l) < vals.get(r)){
                 temp.add(vals.get(l));
                 l++;
                 delay(vals.size());
@@ -122,6 +113,19 @@ public class SortAlgorithms {
                 delay(vals.size());
             }
         }
+
+        //do the ones that have not run out, only one of these loops will ever be entered, not both
+        while(l <= lEnd){
+            temp.add(vals.get(l));
+            l++;
+            delay(vals.size());
+        }
+        while(r <= rEnd){
+            temp.add(vals.get(r));
+            r++;
+            delay(vals.size());
+        }
+
 
         for(int i = 0; i < temp.size(); i++){
             vals.set(savedL+i, temp.get(i));
@@ -322,6 +326,25 @@ public class SortAlgorithms {
             buildAndSendString(widgetNum, vals, n);
 
             heapify(widgetNum, vals, n, largest);
+        }
+    }
+
+    public void insertionSortInRange(int widgetNum, List<Integer> vals, int start, int end) throws InterruptedException {
+        int n = vals.size();
+
+        for(int i = start; i <= end; i++){
+            int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
+
+            for(int j = i-1; j >= start; j--){
+                if(val < vals.get(j)){
+                    swap(vals, j, j+1);
+                    buildAndSendString(widgetNum, vals, n);
+                }
+                else{
+                    break;
+                }
+            }
+
         }
     }
 
