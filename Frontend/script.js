@@ -129,6 +129,7 @@ function generateWidgets() {
           <option value="quick">Quick Sort</option>
           <option value="double-pivot-quick">Double Pivot Quick Sort</option>
           <option value="heap">Heap Sort</option>
+          <option value="tim">Tim Sort</option>
           <option value="counting">Counting Sort</option>
           <option value="bogo">Bogo Sort</option>
           <option value="bozo">Bozo Sort</option>

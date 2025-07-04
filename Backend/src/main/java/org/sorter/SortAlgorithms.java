@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import static org.sorter.Constants.CHUNK_SIZE;
 import static org.sorter.Constants.TIME;
 import static org.sorter.ParseUtils.createSendBackString;
 
@@ -35,6 +36,8 @@ public class SortAlgorithms {
         vals.set(index2, temp);
     }
 
+    //could just call insertionSortInRange with 0 and n-1, maybe we will leave like this tho, bit of code duplication unfortunately
+    //I need insertionSortInRange for timsort anyways
     public void insertionSort(int widgetNum, List<Integer> vals) throws InterruptedException {
         int n = vals.size();
 
@@ -329,13 +332,34 @@ public class SortAlgorithms {
         }
     }
 
-    public void insertionSortInRange(int widgetNum, List<Integer> vals, int start, int end) throws InterruptedException {
+    public void timSort(int widgetNum, List<Integer> vals) throws InterruptedException {
         int n = vals.size();
 
-        for(int i = start; i <= end; i++){
+        timSortRecursive(widgetNum, vals, 0, n-1);
+    }
+
+    public void timSortRecursive(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
+        int size = r-l+1;
+        if(size <= CHUNK_SIZE){ //i think chunk size must be at least 1, if it's 1 then it will just be mergesort methinks, if 0 or less the m+1 may cause it to go out of range and also infinite loop
+            insertionSortInRange(widgetNum, vals, l, r);
+            return;
+        }
+
+        int m = (l+r)/2;
+
+        timSortRecursive(widgetNum, vals, l, m);
+        timSortRecursive(widgetNum, vals, m+1, r);
+
+        merge(widgetNum, vals, l, m, m+1, r);
+    }
+
+    public void insertionSortInRange(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
+        int n = vals.size();
+
+        for(int i = l; i <= r; i++){
             int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
 
-            for(int j = i-1; j >= start; j--){
+            for(int j = i-1; j >= l; j--){
                 if(val < vals.get(j)){
                     swap(vals, j, j+1);
                     buildAndSendString(widgetNum, vals, n);
