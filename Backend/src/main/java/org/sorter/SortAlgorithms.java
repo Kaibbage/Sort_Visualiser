@@ -9,6 +9,8 @@ import static org.sorter.Constants.CHUNK_SIZE;
 import static org.sorter.Constants.TIME;
 import static org.sorter.ParseUtils.createSendBackString;
 
+
+//maybe add delays for each individual operation, not just operations within the n iterations, but like calculating m = (l+r)/2;
 public class SortAlgorithms {
     private SortWebSocketHandler webSocketHandler;
 
@@ -43,19 +45,48 @@ public class SortAlgorithms {
 
         for(int i = 0; i < n; i++){
             int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
+            boolean madeThrough = true;
 
             for(int j = i-1; j >= 0; j--){
                 if(val < vals.get(j)){
-                    swap(vals, j, j+1);
+                    vals.set(j+1, vals.get(j));
                     buildAndSendString(widgetNum, vals, n);
                 }
                 else{
+                    vals.set(j+1, val);
+                    madeThrough = false;
+                    buildAndSendString(widgetNum, vals, n);
                     break;
                 }
             }
 
+            if(madeThrough){
+                vals.set(0, val);
+                buildAndSendString(widgetNum, vals, n);
+            }
+
         }
     }
+
+    //I am keeping as I still like this algorithm and the way it looks, i may add it in as swap insertion sort
+//    public void insertionSort(int widgetNum, List<Integer> vals) throws InterruptedException {
+//        int n = vals.size();
+//
+//        for(int i = 0; i < n; i++){
+//            int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
+//
+//            for(int j = i-1; j >= 0; j--){
+//                if(val < vals.get(j)){
+//                    swap(vals, j, j+1);
+//                    buildAndSendString(widgetNum, vals, n);
+//                }
+//                else{
+//                    break;
+//                }
+//            }
+//
+//        }
+//    }
 
     public void selectionSort(int widgetNum, List<Integer> vals) throws InterruptedException {
         int n = vals.size();
@@ -353,20 +384,31 @@ public class SortAlgorithms {
         merge(widgetNum, vals, l, m, m+1, r);
     }
 
+    //shouldn't use swaps, 3 times less efficient than shifts
     public void insertionSortInRange(int widgetNum, List<Integer> vals, int l, int r) throws InterruptedException {
         int n = vals.size();
 
         for(int i = l; i <= r; i++){
             int val = vals.get(i); //this will become vals.get(j+1) every time since it's switched in, could change it? maybe easier to understand
+            boolean madeThrough = true;
 
             for(int j = i-1; j >= l; j--){
                 if(val < vals.get(j)){
-                    swap(vals, j, j+1);
+                    vals.set(j+1, vals.get(j));
                     buildAndSendString(widgetNum, vals, n);
                 }
                 else{
+                    vals.set(j+1, val);
+                    madeThrough = false;
+                    buildAndSendString(widgetNum, vals, n);
+
                     break;
                 }
+            }
+
+            if(madeThrough){
+                vals.set(l, val);
+                buildAndSendString(widgetNum, vals, n);
             }
 
         }
