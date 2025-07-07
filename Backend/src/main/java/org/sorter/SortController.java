@@ -246,24 +246,9 @@ public class SortController {
     }
 
 
-
-//    @PostMapping("/start-solving-dijkstra")
-//    public String startSolvingDijkstra(@RequestBody InputRequest request) {
-//        String input = request.getInput();
-//
-//        int[][] grid = ParseUtils.getGridFromString(input);
-//
-//        new Thread(() -> {
-//            try {
-//                graphAlgorithms.dijkstra(grid);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
-//
-//
-//        return "Shortest Path solving started";
-//    }
+    //maybe upgrade performance by only sending the lines that changed, not reloading all the lines every time
+    //also maybe add highlight or black bar to show which line is being considered all the time
+    //to do this would have to add an extra load at the end just to get rid of black bar
 
 
 
